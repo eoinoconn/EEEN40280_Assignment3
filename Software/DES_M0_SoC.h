@@ -54,6 +54,21 @@ typedef struct {
 #define NVIC_UART_BIT_POS		1      // bit position of UART in ARM's interrupt control register
 
 
+typedef struct {
+	union {
+		volatile uint8   RxSPIData;
+		volatile uint32  reserved0;
+	};
+	union {
+		volatile uint8   TxSPIData;
+		volatile uint32  reserved1;
+	};
+	union {
+		volatile uint8   SPIControl;
+		volatile uint32  reserved2;
+	};
+} SPI_t;
+
 
 typedef struct {
 	union {
@@ -80,6 +95,7 @@ typedef struct {
 
 // use above typedefs to define the memory map.
 #define pt2NVIC ((NVIC_t *)0xE000E100)
+#define pt2SPI  ((SPI_t *)0x52000000)
 #define pt2UART ((UART_t *)0x51000000)
 #define pt2GPIO ((GPIO_t *)0x50000000)
 

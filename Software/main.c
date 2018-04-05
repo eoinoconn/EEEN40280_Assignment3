@@ -24,6 +24,8 @@ volatile uint8  counter  = 0; // current number of char received on UART current
 volatile uint8  BufReady = 0; // Flag to indicate if there is a sentence worth of data in RxBuf
 volatile uint8  RxBuf[BUF_SIZE];
 
+volatile uint8 Value;
+volatile uint8 Control;
 
 //////////////////////////////////////////////////////////////////
 // Interrupt service routine, runs when UART interrupt occurs - see cm0dsasm.s
@@ -55,6 +57,35 @@ void wait_n_loops(uint32 n) {
 		for(i=0;i<n;i++){
 			;
 		}
+}
+
+//////////////////////////////////////////////////////////////////
+// Software interact spi master
+//////////////////////////////////////////////////////////////////
+void send_spi_data(uint8 address, uint8 data) {
+	pt2SPI->TxSPIData = 0x0a;
+		
+	while(pt2SPI->SPIControl==0x01){
+	}
+	pt2SPI->TxSPIData = address;
+	while(pt2SPI->SPIControl==0x01){
+	}
+	pt2SPI->TxSPIData = data;
+	while(pt2SPI->SPIControl==0x01){
+	}
+}
+
+void receive_spi_data(uint8 address) {
+	pt2SPI->TxSPIData = 0x0b;
+	while(pt2SPI->SPIControl==0x01){
+	}
+	pt2SPI->TxSPIData = address;
+	while(pt2SPI->SPIControl==0x01){
+	}
+	pt2SPI->TxSPIData = 0x00;
+	while(pt2SPI->SPIControl==0x01){
+	}
+	Value = pt2SPI->RxSPIData;
 }
 
 

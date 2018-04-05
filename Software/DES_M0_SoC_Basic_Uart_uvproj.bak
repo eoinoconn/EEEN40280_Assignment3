@@ -29,7 +29,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>C:\Users\bmulkeen\SoC\DES_M0_SoC\Software\DES_M0_SoC.SFR</SFDFile>
+          <SFDFile>C:\Users\lab\Documents\EmbeddedSystems\Wednesday\DES_SoC\Software\DES_M0_SoC.SFR</SFDFile>
           <bCustSvd>1</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -72,6 +72,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -80,6 +82,8 @@
             <UserProg2Name>fromelf -cvf .\temp_files\DES_M0_SoC.axf -o .\temp_files\disasm.txt</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopA1X>0</nStopA1X>
+            <nStopA2X>0</nStopA2X>
           </AfterMake>
           <SelectedForBatchBuild>0</SelectedForBatchBuild>
           <SVCSIdString></SVCSIdString>
@@ -141,7 +145,6 @@
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>0</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>-1</TargetSelection>
@@ -358,6 +361,8 @@
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
             <useXO>0</useXO>
+            <v6Lang>0</v6Lang>
+            <v6LangP>0</v6LangP>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
