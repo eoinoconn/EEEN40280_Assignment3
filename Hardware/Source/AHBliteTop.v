@@ -22,11 +22,14 @@ module AHBliteTop (
     input btnC,         // centre button
     input btnR,         // right button
     input RsRx,         // serial port receive line
+    input SpiRx,        // SPI receive line
     input [15:0] sw,    // 16 slide switches on Nexys 4 board
     output [15:0] led,   // 16 individual LEDs above slide switches   
     output [5:0] rgbLED,   // multi-colour LEDs - {blu2, grn2, red2, blu1, grn1, red1} 
     output [7:0] JA,    // monitoring connector on FPGA board - use with oscilloscope
-    output RsTx     // serial port transmit line
+    output RsTx,     // serial port transmit line
+    output SpiTx,        // SPI transmit line
+    output SS1
     );
  
   localparam  BAD_DATA = 32'hdeadbeef;
@@ -158,7 +161,7 @@ module AHBliteTop (
         .HSEL_S1    (HSEL_ram),
         .HSEL_S2    (HSEL_gpio),
         .HSEL_S3    (HSEL_uart),
-        .HSEL_S4    (),
+        .HSEL_S4    (HSEL_spi),
         .HSEL_S5    (),
         .HSEL_S6    (),
         .HSEL_S7    (),
@@ -179,7 +182,7 @@ module AHBliteTop (
         .HRDATA_S1      (HRDATA_ram),
         .HRDATA_S2      (HRDATA_gpio),
         .HRDATA_S3      (HRDATA_uart),
-        .HRDATA_S4      (BAD_DATA),
+        .HRDATA_S4      (HRDATA_spi),
         .HRDATA_S5      (BAD_DATA),
         .HRDATA_S6      (BAD_DATA),
         .HRDATA_S7      (BAD_DATA),
@@ -192,7 +195,7 @@ module AHBliteTop (
         .HREADYOUT_S1   (HREADYOUT_ram),
         .HREADYOUT_S2   (HREADYOUT_gpio),
         .HREADYOUT_S3   (HREADYOUT_uart),             
-        .HREADYOUT_S4   (1'b1),                 // unused inputs tied to 1
+        .HREADYOUT_S4   (HREADYOUT_spi),                 // unused inputs tied to 1
         .HREADYOUT_S5   (1'b1),
         .HREADYOUT_S6   (1'b1),
         .HREADYOUT_S7   (1'b1),
@@ -285,5 +288,28 @@ module AHBliteTop (
 			.serialTx    (RsTx),			   // serial transmit, idles at 1
 			.uart_IRQ    (IRQ[1])			   // interrupt request
     );
+
+// ======================== Block SPI ======================================
+// instantiate the AHBspi module here...
+
+    AHBspi    SPI(
+			.HCLK        (HCLK),			   // bus clock
+            .HRESETn     (HRESETn),            // bus reset, active low
+            .HSEL        (HSEL_uart),          // selects this slave
+            .HREADY      (HREADY),             // indicates previous transaction completing
+            .HADDR       (HADDR),              // address
+            .HTRANS      (HTRANS),             // transaction type (only bit 1 used)
+            .HWRITE      (HWRITE),        // write transaction
+//			input wire [2:0] HSIZE,		       // transaction width ignored
+            .HWDATA      (HWDATA),	           // write data
+			.HRDATA      (HRDATA_spi),	       // read data from slave
+			.HREADYOUT   (HREADYOUT_spi),	   // ready output from slave
+			// SPI signals
+			.MISO        (SpiRx),			   // serial receive, idles at 1
+			.MOSI        (SpiTx),			   // serial transmit, idles at 1
+			.SCLK        (SpiClk),			   // interrupt request
+			.SS1         (AccS)
+    );
+
 
 endmodule
