@@ -97,6 +97,8 @@ int main(void) {
 	uint8 TxBuf[ARRAY_SIZE(RxBuf)];
 	int count;
 	
+	send_spi_data(0x2d, 0x42);		//Setup Accelerometer 
+	
 	pt2UART->Control = (1 << UART_RX_FIFO_EMPTY_BIT_INT_POS);		// Enable rx data available interrupt, and no others.
   pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);								// Enable interrupts for UART in the NVIC
 	wait_n_loops(nLOOPS_per_DELAY);										// wait a little
@@ -140,13 +142,15 @@ int main(void) {
 			count=counter;
 			counter  = 0; // clear the counter for next sentence		
 			// ---- end of critical section ----		
+
+			receive_spi_data(0x0E);
 			
 			pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);		// Enable interrupts for UART in the NVIC
-
 
 			printf("\r\n:--> |%s|\r\n", TxBuf);  // print the results between bars
 			printf("Number of characters %d\r\n",count);
 			printf("State of switches %d\r\n",pt2GPIO->Switches);
+			printf("Accelerometer %d\r\n",Value);
 			
 		} // end of infinite loop
 
