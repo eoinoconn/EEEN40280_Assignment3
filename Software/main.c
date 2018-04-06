@@ -64,25 +64,26 @@ void wait_n_loops(uint32 n) {
 //////////////////////////////////////////////////////////////////
 void send_spi_data(uint8 address, uint8 data) {
 	pt2SPI->TxSPIData = 0x0a;
-		
-	while(pt2SPI->SPIControl==0x01){
-	}
+	while(pt2SPI->SPIControl==0x00){}
+	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = address;
-	while(pt2SPI->SPIControl==0x01){
-	}
+	while(pt2SPI->SPIControl==0x00){}
+	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = data;
+	while(pt2SPI->SPIControl==0x00){}
 	while(pt2SPI->SPIControl==0x01){
 	}
 }
 
 void receive_spi_data(uint8 address) {
 	pt2SPI->TxSPIData = 0x0b;
-	while(pt2SPI->SPIControl==0x01){
-	}
+	while(pt2SPI->SPIControl==0x00){}
+	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = address;
-	while(pt2SPI->SPIControl==0x01){
-	}
+	while(pt2SPI->SPIControl==0x00){}
+	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = 0x00;
+	while(pt2SPI->SPIControl==0x00){}
 	while(pt2SPI->SPIControl==0x01){
 	}
 	Value = pt2SPI->RxSPIData;
