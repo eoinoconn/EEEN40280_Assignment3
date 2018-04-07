@@ -104,6 +104,14 @@ module AHBspi(
     
     // ========================= SPI ===================================================
     // Spi module
+    rSPI    SPI (
+              .clk         (HCLK),
+              .rst         (~HRESETn),
+              .MISO        (SpiRx),               // serial receive, idles at 1
+              .MOSI        (SpiTx),               // serial transmit, idles at 1
+              .SCLK        (SpiClk),               // interrupt request
+              .SS1         (AccS) 
+            );
     
 
 

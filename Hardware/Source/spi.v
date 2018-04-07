@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module uart(
+module spi(
     input clk,						// main clock, drives all logic
     input rst,						// asynchronous reset
     input [7:0] txdin,			// 8-bit data to be transmitted
