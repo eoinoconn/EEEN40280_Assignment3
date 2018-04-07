@@ -11,7 +11,7 @@ module AHBspi(
 			input wire [31:0] HWDATA,	// write data
 			output wire [31:0] HRDATA,	// read data from slave
 			output wire HREADYOUT,		// ready output from slave
-			// UART signals
+			// SPI signals
 			input MISO,				    //  
 			output MOSI,				// 
 			output SCLK,				// 
