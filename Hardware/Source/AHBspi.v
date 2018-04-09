@@ -27,8 +27,8 @@ module AHBspi(
         reg [7:0]    readData;        // 8-bit data from read multiplexer
         wire [7:0] rx_fifo_out, rx_fifo_in, tx_fifo_out;  // fifo data
         wire rx_fifo_empty, rx_fifo_full, tx_fifo_empty, tx_fifo_full;  // fifo output signals
-        wire tx_fifo_wr = rWrite & (rHADDR == 2'h1);  // tx fifo write on write to address 0x4
-        wire rx_fifo_rd = rRead & (rHADDR == 2'h0);  // rx fifo read on read to address 0x0
+        wire tx_fifo_wr = rWrite & (rHADDR == 2'h2);  // tx fifo write on write to address 0x4
+        wire rx_fifo_rd = (rRead & (rHADDR == 2'h1) & ~rx_fifo_empty);  // rx fifo read on read to address 0x0
         wire txrdy;        // transmitter status signal
         wire txgo = ~tx_fifo_empty;    // transmitter control signal
         wire rxnew;        // receiver strobe output
@@ -48,25 +48,18 @@ module AHBspi(
                 rRead <= HSEL & ~HWRITE & HTRANS[1];    // slave selected for read transfer 
              end
     
-        // Control register
-        reg [3:0] control;    // holds interrupt enable bits
-        always @(posedge HCLK)
-            if (!HRESETn) control <= 4'b0;
-            else if (rWrite && (rHADDR == 2'h3)) control <= HWDATA[3:0];
             
         // Status bits - can read in status register, can cause interrupts if enabled
-        wire [3:0] status = {~rx_fifo_empty, rx_fifo_full, tx_fifo_empty, tx_fifo_full};
+        wire [0] status = {~tx_ready};
         
-        // Interrupt signal - AND each status bit with enable bit, then OR all the results
-        assign uart_IRQ = |(status & control);
             
         // Bus output signals
         always @(rx_fifo_out, tx_fifo_out, status, control, rHADDR)
             case (rHADDR)        // select on word address (stored from address phase)
-                2'h0:        readData = rx_fifo_out;    // read from rx fifo - oldest received byte
-                2'h1:        readData = tx_fifo_out;    // read of tx register gives oldest byte in queue
-                2'h2:        readData = {4'b0, status};    // status register        
-                2'h3:        readData = {4'b0, control};    // read back of control register
+                2'h0:        readData = {7'b0, status};    // status register    
+                2'h1:        readData = rx_fifo_out;    // read from rx fifo - oldest received byte
+                2'h2:        readData = tx_fifo_out;    // read of tx register gives oldest byte in queue    
+                default:     readData = {8'b0};
             endcase
             
         assign HRDATA = {24'b0, readData};    // extend with 0 bits for bus read
@@ -81,7 +74,7 @@ module AHBspi(
             uFIFO_TX (
             .clk(HCLK),
             .resetn(HRESETn),
-            .rd(txrdy & txgo),        // same signal that loads data register in transmitter
+            .rd(tx_ready & txgo),        // same signal that loads data register in transmitter
             .wr(tx_fifo_wr),
             .w_data(HWDATA[7:0]),
             .empty(tx_fifo_empty),
@@ -94,7 +87,7 @@ module AHBspi(
             uFIFO_RX (
             .clk(HCLK),
             .resetn(HRESETn),
-            .rd(rx_fifo_rd & ~rx_fifo_empty),
+            .rd(rx_fifo_rd),
             .wr(rxnew),
             .w_data(rx_fifo_in),
             .empty(rx_fifo_empty),
@@ -104,13 +97,18 @@ module AHBspi(
     
     // ========================= SPI ===================================================
     // Spi module
-    rSPI    SPI (
+    SPI    rSPI (
               .clk         (HCLK),
               .rst         (~HRESETn),
-              .MISO        (SpiRx),               // serial receive, idles at 1
-              .MOSI        (SpiTx),               // serial transmit, idles at 1
-              .SCLK        (SpiClk),               // interrupt request
-              .SS1         (AccS) 
+              .txdin       (tx_fifo_out),
+              .txgo        (~tx_fifo_empty),
+              .txrdy       (tx_ready),
+              .rxdout      (rx_fifo_in),
+              .rxnew       (rx_new),
+              .MISO        (MISO),               // serial receive, idles at 1
+              .MOSI        (MOSI),               // serial transmit, idles at 1
+              .SCLK        (SCLK),               // interrupt request
+              .SS1         (SSn) 
             );
     
 
