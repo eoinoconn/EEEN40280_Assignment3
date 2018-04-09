@@ -24,7 +24,7 @@ volatile uint8  counter  = 0; // current number of char received on UART current
 volatile uint8  BufReady = 0; // Flag to indicate if there is a sentence worth of data in RxBuf
 volatile uint8  RxBuf[BUF_SIZE];
 
-volatile uint8 Value;
+volatile uint16 Value;
 volatile uint8 Control;
 
 //////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ void send_spi_data(uint8 address, uint8 data) {
 	}
 }
 
-void receive_spi_data(uint8 address) {
+uint8 receive_spi_data(uint8 address) {
 	pt2SPI->TxSPIData = 0x0b;
 	while(pt2SPI->SPIControl==0x00){}
 	while(pt2SPI->SPIControl==0x01){}
@@ -86,7 +86,7 @@ void receive_spi_data(uint8 address) {
 	while(pt2SPI->SPIControl==0x00){}
 	while(pt2SPI->SPIControl==0x01){
 	}
-	Value = pt2SPI->RxSPIData;
+	return pt2SPI->RxSPIData;
 }
 
 
@@ -144,7 +144,7 @@ int main(void) {
 			counter  = 0; // clear the counter for next sentence		
 			// ---- end of critical section ----		
 
-			receive_spi_data(0x0E);
+			Value=receive_spi_data(0x0F);
 			
 			pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);		// Enable interrupts for UART in the NVIC
 
