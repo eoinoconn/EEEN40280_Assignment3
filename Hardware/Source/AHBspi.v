@@ -15,7 +15,7 @@ module AHBspi(
 			input MISO,				    //  
 			output MOSI,				// 
 			output SCLK,				// 
-			output SS1                  //
+			output SSn                  //
 			
     );
 
@@ -50,11 +50,11 @@ module AHBspi(
     
             
         // Status bits - can read in status register, can cause interrupts if enabled
-        wire [0] status = {~tx_ready};
+        wire status = {~tx_ready};
         
             
         // Bus output signals
-        always @(rx_fifo_out, tx_fifo_out, status, control, rHADDR)
+        always @(rx_fifo_out, tx_fifo_out, status, rHADDR)
             case (rHADDR)        // select on word address (stored from address phase)
                 2'h0:        readData = {7'b0, status};    // status register    
                 2'h1:        readData = rx_fifo_out;    // read from rx fifo - oldest received byte
@@ -88,7 +88,7 @@ module AHBspi(
             .clk(HCLK),
             .resetn(HRESETn),
             .rd(rx_fifo_rd),
-            .wr(rxnew),
+            .wr(rx_new),
             .w_data(rx_fifo_in),
             .empty(rx_fifo_empty),
             .full(rx_fifo_full),
@@ -108,7 +108,7 @@ module AHBspi(
               .MISO        (MISO),               // serial receive, idles at 1
               .MOSI        (MOSI),               // serial transmit, idles at 1
               .SCLK        (SCLK),               // interrupt request
-              .SS1         (SSn) 
+              .SSn         (SSn) 
             );
     
 

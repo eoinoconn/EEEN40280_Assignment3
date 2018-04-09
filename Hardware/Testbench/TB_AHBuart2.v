@@ -93,6 +93,8 @@ module TB_AHBuart2(    );
         AHBidle;
 		  for (i=0; i<20; i=i+1)
 				AHBread (WORD, 32'h0, i+20);  // check received data 
+		#50;
+		$stop;
 		  
         
     end

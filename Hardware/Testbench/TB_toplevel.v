@@ -36,9 +36,11 @@ module TB_toplevel(    );
         #30 btnCpuReset = 1'b0;  // active low reset
         #70 btnCpuReset = 1'b1;  // release reset
         
-        #1000;      // delay 
+        #20000;      // delay 20 us or 1000 clock cycles
 
-			// no stop instruction - this can run indefinitely...
+	// should have no stop instruction - this could run indefinitely...
+	// but Vivado 2015.2 cannot regain control?
+		$stop;
         
       end
      

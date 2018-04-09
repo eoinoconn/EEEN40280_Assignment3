@@ -73,6 +73,8 @@ module TB_AHBgpio(    );
         AHBread (BYTE, 32'h4, 32'h000056ee);
         AHBread (WORD, 32'h0, 32'h0000554d);
         AHBidle;
+        #50;
+        $stop;
         
     end
     
