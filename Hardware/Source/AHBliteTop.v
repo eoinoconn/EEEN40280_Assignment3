@@ -22,14 +22,15 @@ module AHBliteTop (
     input btnC,         // centre button
     input btnR,         // right button
     input RsRx,         // serial port receive line
-    input SpiRx,        // SPI receive line
+    input aclMISO,        // SPI receive line
     input [15:0] sw,    // 16 slide switches on Nexys 4 board
     output [15:0] led,   // 16 individual LEDs above slide switches   
     output [5:0] rgbLED,   // multi-colour LEDs - {blu2, grn2, red2, blu1, grn1, red1} 
     output [7:0] JA,    // monitoring connector on FPGA board - use with oscilloscope
     output RsTx,     // serial port transmit line
-    output SpiTx,        // SPI transmit line
-    output SS1
+    output aclMOSI,        // SPI transmit line
+    output aclSS,
+    output aclSCK
     );
  
   localparam  BAD_DATA = 32'hdeadbeef;
@@ -305,10 +306,10 @@ module AHBliteTop (
 			.HRDATA      (HRDATA_spi),	       // read data from slave
 			.HREADYOUT   (HREADYOUT_spi),	   // ready output from slave
 			// SPI signals
-			.MISO        (SpiRx),			   // serial receive, idles at 1
-			.MOSI        (SpiTx),			   // serial transmit, idles at 1
-			.SCLK        (SpiClk),			   // interrupt request
-			.SS1         (AccS)
+			.MISO        (aclMISO),			   // serial receive, idles at 1
+			.MOSI        (aclMOSI),			   // serial transmit, idles at 1
+			.SCLK        (aclSCK),			   // interrupt request
+			.SS1         (aclSS)
     );
 
 
