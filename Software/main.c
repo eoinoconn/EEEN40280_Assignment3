@@ -64,28 +64,18 @@ void wait_n_loops(uint32 n) {
 //////////////////////////////////////////////////////////////////
 void send_spi_data(uint8 address, uint8 data) {
 	pt2SPI->TxSPIData = 0x0a;
-	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = address;
-	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = data;
 	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){
-	}
+	while(pt2SPI->SPIControl==0x01){}
 }
 
 uint8 receive_spi_data(uint8 address) {
 	pt2SPI->TxSPIData = 0x0b;
-	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = address;
-	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){}
 	pt2SPI->TxSPIData = 0x00;
 	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){
-	}
+	while(pt2SPI->SPIControl==0x01){}
 	return pt2SPI->RxSPIData;
 }
 
@@ -144,6 +134,16 @@ int main(void) {
 			counter  = 0; // clear the counter for next sentence		
 			// ---- end of critical section ----		
 
+//			if (pt2GPIO->Switches==0x00){
+//				Value=((receive_spi_data(0x0E)&0x0F)<<8) + receive_spi_data(0x0F);
+//			}
+//			else if (pt2GPIO->Switches==0x00){
+//				Value=((receive_spi_data(0x0E)&0x10)<<8) + receive_spi_data(0x11);
+//			}
+//			else{
+//				Value=((receive_spi_data(0x0E)&0x12)<<8) + receive_spi_data(0x13);
+//			}
+			
 			Value=receive_spi_data(0x0F);
 			
 			pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);		// Enable interrupts for UART in the NVIC
