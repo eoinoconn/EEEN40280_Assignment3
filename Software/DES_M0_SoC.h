@@ -56,15 +56,15 @@ typedef struct {
 
 typedef struct {
 	union {
-		volatile uint8   RxSPIData;
+		volatile uint8   SPIControl;
 		volatile uint32  reserved0;
 	};
 	union {
-		volatile uint8   TxSPIData;
+		volatile uint8   RxSPIData;
 		volatile uint32  reserved1;
 	};
 	union {
-		volatile uint8   SPIControl;
+		volatile uint8   TxSPIData;
 		volatile uint32  reserved2;
 	};
 } SPI_t;

@@ -64,18 +64,26 @@ void wait_n_loops(uint32 n) {
 //////////////////////////////////////////////////////////////////
 void send_spi_data(uint8 address, uint8 data) {
 	pt2SPI->TxSPIData = 0x0a;
+	while((pt2SPI->SPIControl&0x01)==0x00){}
+	while((pt2SPI->SPIControl&0x01)==0x01){}
 	pt2SPI->TxSPIData = address;
+	while((pt2SPI->SPIControl&0x01)==0x00){}
+	while((pt2SPI->SPIControl&0x01)==0x01){}
 	pt2SPI->TxSPIData = data;
-	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){}
+	while((pt2SPI->SPIControl&0x01)==0x00){}
+	while((pt2SPI->SPIControl&0x01)==0x01){}
 }
 
 uint8 receive_spi_data(uint8 address) {
 	pt2SPI->TxSPIData = 0x0b;
+	while((pt2SPI->SPIControl&0x01)==0x00){}
+	while((pt2SPI->SPIControl&0x01)==0x01){}
 	pt2SPI->TxSPIData = address;
+	while((pt2SPI->SPIControl&0x01)==0x00){}
+	while((pt2SPI->SPIControl&0x01)==0x01){}
 	pt2SPI->TxSPIData = 0x00;
-	while(pt2SPI->SPIControl==0x00){}
-	while(pt2SPI->SPIControl==0x01){}
+	while((pt2SPI->SPIControl&0x01)==0x00){}
+	while((pt2SPI->SPIControl&0x01)==0x01){}
 	return pt2SPI->RxSPIData;
 }
 
@@ -144,14 +152,14 @@ int main(void) {
 //				Value=((receive_spi_data(0x0E)&0x12)<<8) + receive_spi_data(0x13);
 //			}
 			
-			Value=receive_spi_data(0x0F);
+			Value=receive_spi_data(0x00);			//Check consant register 0xAD
 			
 			pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);		// Enable interrupts for UART in the NVIC
 
 			printf("\r\n:--> |%s|\r\n", TxBuf);  // print the results between bars
 			printf("Number of characters %d\r\n",count);
 			printf("State of switches %d\r\n",pt2GPIO->Switches);
-			printf("Accelerometer %d\r\n",Value);
+			printf("Accelerometer %x\r\n",Value);
 			
 		} // end of infinite loop
 
