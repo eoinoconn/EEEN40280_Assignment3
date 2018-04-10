@@ -309,7 +309,7 @@ module AHBliteTop (
 			.MISO        (aclMISO),			   // serial receive, idles at 1
 			.MOSI        (aclMOSI),			   // serial transmit, idles at 1
 			.SCLK        (aclSCK),			   // interrupt request
-			.SS1         (aclSS)
+			.SSn         (aclSS)
     );
 
 
