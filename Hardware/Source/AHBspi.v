@@ -50,7 +50,7 @@ module AHBspi(
     
             
         // Status bits - can read in status register, can cause interrupts if enabled
-        wire status = {~tx_ready};
+        wire status = {~tx_ready & txgo};
         
             
         // Bus output signals

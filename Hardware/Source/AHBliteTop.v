@@ -59,7 +59,7 @@ module AHBliteTop (
 // Slave select signals (one per slave)
     wire        HSEL_rom, HSEL_ram, HSEL_gpio, HSEL_uart;
 // Slave output signals (one per slave)
-    wire [31:0] HRDATA_rom, HRDATA_ram, HRDATA_gpio, HRDATA_uart;
+    wire [31:0] HRDATA_rom, HRDATA_ram, HRDATA_gpio, HRDATA_uart, HRDATA_spi;
     wire        HREADYOUT_rom, HREADYOUT_ram, HREADYOUT_gpio, HREADYOUT_uart;
  
 
