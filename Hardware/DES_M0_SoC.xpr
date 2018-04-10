@@ -10,7 +10,7 @@
     <Option Name="Part" Val="xc7a100tcsg324-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="BoardPart" Val=""/>
-    <Option Name="ActiveSimSet" Val="sim_gpio"/>
+    <Option Name="ActiveSimSet" Val="sim_spi"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="EnableCoreContainer" Val="FALSE"/>
     <Option Name="EnableCoreContainerForIPI" Val="FALSE"/>
@@ -236,6 +236,7 @@
         <Option Name="TopModule" Val="TB_AHBgpio"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
+        <Option Name="SimMode" Val="post-implementation"/>
         <Option Name="SrcSet" Val=""/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/TB_AHBgpio_behav.wcfg"/>
       </Config>
@@ -282,6 +283,46 @@
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="SrcSet" Val=""/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/TB_AHBuart2_behav.wcfg"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="sim_spi" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_spi">
+      <Filter Type="Srcs"/>
+      <File Path="$PPRDIR/Source/spi.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/Source/AHBspi.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/Source/fifo.v">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/Testbench/TB_AHBspi.v">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="DesignMode" Val="RTL"/>
+        <Option Name="TopModule" Val="AHBspi"/>
+        <Option Name="TopLib" Val="xil_defaultlib"/>
+        <Option Name="TopAutoSet" Val="TRUE"/>
+        <Option Name="SrcSet" Val=""/>
       </Config>
     </FileSet>
   </FileSets>

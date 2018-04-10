@@ -63,15 +63,28 @@ void wait_n_loops(uint32 n) {
 // Software interact spi master
 //////////////////////////////////////////////////////////////////
 void send_spi_data(uint8 address, uint8 data) {
+	printf("Control %x\r\n",pt2SPI->SPIControl);
+	printf("\r\nStarting\r\n");
 	pt2SPI->TxSPIData = 0x0a;
+	printf("\r\nSending instruction\r\n");
+	printf("Control %x\r\n",pt2SPI->SPIControl);
+	
 	while((pt2SPI->SPIControl&0x01)==0x00){}
+	printf("\r\nHigh\r\n");
 	while((pt2SPI->SPIControl&0x01)==0x01){}
+	printf("\r\nLow\r\n");
 	pt2SPI->TxSPIData = address;
+	printf("\r\nSending adress\r\n");
 	while((pt2SPI->SPIControl&0x01)==0x00){}
+	printf("\r\nHigh\r\n");
 	while((pt2SPI->SPIControl&0x01)==0x01){}
+	printf("\r\nLow\r\n");
 	pt2SPI->TxSPIData = data;
+	printf("\r\nSending data\r\n");
 	while((pt2SPI->SPIControl&0x01)==0x00){}
+	printf("\r\nHigh\r\n");
 	while((pt2SPI->SPIControl&0x01)==0x01){}
+	printf("\r\nLow\r\n");
 }
 
 uint8 receive_spi_data(uint8 address) {
