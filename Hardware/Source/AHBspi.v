@@ -68,19 +68,21 @@ module AHBspi(
         assign HREADYOUT = 1'b1;    // always ready - transaction never delayed
     //    assign HREADYOUT = ~((tx_fifo_wr & tx_fifo_full) | (rx_fifo_rd & rx_fifo_empty));
         
+        
+        
     // ========================= FIFOs ===================================================
-          //Transmitter FIFO
-          FIFO  #(.DWIDTH(8), .AWIDTH(4))
-            uFIFO_TX (
-            .clk(HCLK),
-            .resetn(HRESETn),
-            .rd(tx_ready & txgo),        // same signal that loads data register in transmitter
-            .wr(tx_fifo_wr),
-            .w_data(HWDATA[7:0]),
-            .empty(tx_fifo_empty),
-            .full(tx_fifo_full),
-            .r_data(tx_fifo_out)
-          );
+//          //Transmitter FIFO
+//          FIFO  #(.DWIDTH(8), .AWIDTH(4))
+//            uFIFO_TX (
+//            .clk(HCLK),
+//            .resetn(HRESETn),
+//            .rd(tx_ready & txgo),        // same signal that loads data register in transmitter
+//            .wr(tx_fifo_wr),
+//            .w_data(HWDATA[7:0]),
+//            .empty(tx_fifo_empty),
+//            .full(tx_fifo_full),
+//            .r_data(tx_fifo_out)
+//          );
           
           //Receiver FIFO
           FIFO  #(.DWIDTH(8), .AWIDTH(4))
@@ -100,8 +102,8 @@ module AHBspi(
     SPI    rSPI (
               .clk         (HCLK),
               .rst         (~HRESETn),
-              .txdin       (tx_fifo_out),
-              .txgo        (~tx_fifo_empty),
+              .txdin       (HWDATA[7:0]),
+              .txgo        (tx_fifo_wr),
               .txrdy       (tx_ready),
               .rxdout      (rx_fifo_in),
               .rxnew       (rx_new),
