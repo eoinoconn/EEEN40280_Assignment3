@@ -25,13 +25,13 @@ module AHBspi(
     
         // Internal signals
         reg [7:0]    readData;        // 8-bit data from read multiplexer
-        wire [7:0] rx_fifo_out, rx_fifo_in, tx_fifo_out;  // fifo data
-        wire rx_fifo_empty, rx_fifo_full, tx_fifo_empty, tx_fifo_full;  // fifo output signals
-        wire tx_fifo_wr = rWrite & (rHADDR == 2'h2);  // tx fifo write on write to address 0x4
-        wire rx_fifo_rd = (rRead & (rHADDR == 2'h1) & ~rx_fifo_empty);  // rx fifo read on read to address 0x0
+        //wire [7:0] rx_fifo_out, rx_fifo_in, tx_fifo_out;  // fifo data
+        //wire rx_fifo_empty, rx_fifo_full, tx_fifo_empty, tx_fifo_full;  // fifo output signals
+        wire tx_wr = rWrite & (rHADDR == 2'h2);  // tx fifo write on write to address 0x4
+        //wire rx_fifo_rd = (rRead & (rHADDR == 2'h1) & ~rx_fifo_empty);  // rx fifo read on read to address 0x0
         wire txrdy;        // transmitter status signal
-        wire txgo = ~tx_fifo_empty;    // transmitter control signal
-        wire rxnew;        // receiver strobe output
+        //wire txgo = ~tx_fifo_empty;    // transmitter control signal
+        //wire rxnew;        // receiver strobe output
     
          // Capture bus signals in address phase
         always @(posedge HCLK)
@@ -50,15 +50,15 @@ module AHBspi(
     
             
         // Status bits - can read in status register, can cause interrupts if enabled
-        wire status = {~tx_ready & txgo};
+        wire status = {~tx_ready & tx_wr};
         
             
         // Bus output signals
-        always @(rx_fifo_out, tx_fifo_out, status, rHADDR)
+        always @(rxdout, status, rHADDR)
             case (rHADDR)        // select on word address (stored from address phase)
                 2'h0:        readData = {7'b0, status};    // status register    
-                2'h1:        readData = rx_fifo_out;    // read from rx fifo - oldest received byte
-                2'h2:        readData = tx_fifo_out;    // read of tx register gives oldest byte in queue    
+                2'h1:        readData = rxdout;    // read from rx fifo - oldest received byte
+                //2'h2:        readData = txdout;    // read of tx register gives oldest byte in queue    
                 default:     readData = {8'b0};
             endcase
             
@@ -84,29 +84,30 @@ module AHBspi(
 //            .r_data(tx_fifo_out)
 //          );
           
-          //Receiver FIFO
-          FIFO  #(.DWIDTH(8), .AWIDTH(4))
-            uFIFO_RX (
-            .clk(HCLK),
-            .resetn(HRESETn),
-            .rd(rx_fifo_rd),
-            .wr(rx_new),
-            .w_data(rx_fifo_in),
-            .empty(rx_fifo_empty),
-            .full(rx_fifo_full),
-            .r_data(rx_fifo_out)
-          );
+//          //Receiver FIFO
+//          FIFO  #(.DWIDTH(8), .AWIDTH(4))
+//            uFIFO_RX (
+//            .clk(HCLK),
+//            .resetn(HRESETn),
+//            .rd(rx_fifo_rd),
+//            .wr(rx_new),
+//            .w_data(rx_fifo_in),
+//            .empty(rx_fifo_empty),
+//            .full(rx_fifo_full),
+//            .r_data(rx_fifo_out)
+//          );
     
     // ========================= SPI ===================================================
+    
+    wire [7:0] rxdout;
     // Spi module
     SPI    rSPI (
               .clk         (HCLK),
               .rst         (~HRESETn),
               .txdin       (HWDATA[7:0]),
-              .txgo        (tx_fifo_wr),
+              .txgo        (tx_wr),
               .txrdy       (tx_ready),
-              .rxdout      (rx_fifo_in),
-              .rxnew       (rx_new),
+              .rxdout      (rxdout),
               .MISO        (MISO),               // serial receive, idles at 1
               .MOSI        (MOSI),               // serial transmit, idles at 1
               .SCLK        (SCLK),               // interrupt request

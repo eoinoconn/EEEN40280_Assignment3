@@ -10,8 +10,8 @@ module SPI(
     output reg SCLK,
     output txrdy,					// transmitter ready for new data
     input MISO,						// serial data in (idle at logic 1, high)
-    output reg [7:0] rxdout,	// 8-bit received data
-    output wire rxnew					// indicates new data available, asserted for 1 clock
+    output reg [7:0] rxdout	// 8-bit received data
+    //output wire rxnew					// indicates new data available, asserted for 1 clock
  );
     
     ////////////////////////////////////////////////////////
@@ -99,16 +99,16 @@ module SPI(
         else                                      // on sampling pulse 
             rxdout <= {MISO, rxdout[7:1]};     // shift right...
         
-    wire non_zero = ~(rxdout == 8'b0);
-    reg [3:0] rx_bit_count;
-    wire [3:0] next_rx_bit_count = rx_bit_count + 4'b1;
+//    wire non_zero = ~(rxdout == 8'b0);
+//    reg [3:0] rx_bit_count;
+//    wire [3:0] next_rx_bit_count = rx_bit_count + 4'b1;
     
-    always @ (posedge SCLK or posedge rst)
-        if (rst) rx_bit_count <= 4'b0;            // reset to zero
-        else                                      // on sampling pulse 
-            rx_bit_count <= next_rx_bit_count;     // shift right...
+//    always @ (posedge SCLK or posedge rst)
+//        if (rst) rx_bit_count <= 4'b0;            // reset to zero
+//        else                                      // on sampling pulse 
+//            rx_bit_count <= next_rx_bit_count;     // shift right...
     
-    assign rxnew = (non_zero & (rx_bit_count == 4'd8));
+//    assign rxnew = (non_zero & (rx_bit_count == 4'd8));
     
    endmodule
    

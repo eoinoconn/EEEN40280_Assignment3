@@ -96,7 +96,7 @@ int main(void) {
 	uint8 TxBuf[ARRAY_SIZE(RxBuf)];
 	int count;
 	
-	send_spi_data(0x2d, 0x42);		//Setup Accelerometer 
+	 
 	
 	pt2UART->Control = (1 << UART_RX_FIFO_EMPTY_BIT_INT_POS);		// Enable rx data available interrupt, and no others.
   pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);								// Enable interrupts for UART in the NVIC
@@ -104,6 +104,9 @@ int main(void) {
 	
 	printf("\r\nWelcome to Eoin and Cian's SoC\r\n");			// output welcome message
 
+	send_spi_data(0x2d, 0x42);		//Setup Accelerometer
+	
+	printf("\r\nFinish Setup\r\n");
 	
 	while(1){			// loop forever
 			
