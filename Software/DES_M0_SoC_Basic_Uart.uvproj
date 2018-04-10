@@ -29,7 +29,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>C:\Users\lab\Documents\EmbeddedSystems\Wednesday\DES_SoC\Software\DES_M0_SoC.SFR</SFDFile>
+          <SFDFile>C:\Users\eoino\Documents\GitHub\EEEN40280_Assignment3\Software\DES_M0_SoC.SFR</SFDFile>
           <bCustSvd>1</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
