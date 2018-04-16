@@ -1,6 +1,3 @@
-
-*.uvproj
-*.bak
-*.jou
-*.wcfg
-*.xpr
+*
+!.c
+!.v
