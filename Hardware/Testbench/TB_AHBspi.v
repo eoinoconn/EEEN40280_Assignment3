@@ -1,10 +1,10 @@
 `timescale 1ns / 1ps 
 ///////////////////////////////////////////////////////////////// 
-// Module Name: TB_AHBuart2 - testbench for AHB uart block 
+// Module Name: TB_AHBspi - testbench for AHB uart block 
 ///////////////////////////////////////////////////////////////// 
 module TB_AHBspi(    ); 
       
-   reg HCLK;        // bus clock 
+    reg HCLK;        // bus clock 
     reg HRESETn;            // bus reset, active low 
     reg HSELx = 1'b0;       // selects this slave 
     reg [31:0] HADDR = 32'h0;    // address 
@@ -15,11 +15,10 @@ module TB_AHBspi(    );
     wire [31:0] HRDATA;    // read data from slave 
     wire HREADY;            // ready signal - from slave, also to slave 
     
-  wire MISO_MOSI; 
   wire SCLK; 
   wire SS; 
-  wire serialRx, serialTx, uart_IRQ; 
-  assign serialRx = serialTx;  // loopback connection for testing 
+  wire MISO, MOSI; 
+  assign MISO = MOSI;  // loopback connection for testing 
    
   integer i; 
     localparam [2:0] BYTE = 3'b000, HALF = 3'b001, WORD = 3'b010;   // HSIZE values 
@@ -36,10 +35,10 @@ module TB_AHBspi(    );
         .HWDATA(HWDATA),   
         .HRDATA(HRDATA),   
         .HREADYOUT(HREADY), 
-        .MISO(MISO_MOSI), 
-        .MOSI(MISO_MOSI), 
+        .MISO(MISO), 
+        .MOSI(MOSI), 
         .SCLK(SCLK), 
-        .SSn(SS), 
+        .SSn(SS)
          ); 
      
     initial 
@@ -58,46 +57,49 @@ module TB_AHBspi(    );
         #20 HRESETn = 1'b1; 
         #50; 
          
-        AHBwrite(WORD, 32'h0, 32'h1a2b3c4d);  // should do nothing 
-    AHBidle; 
-        AHBwrite(WORD, 32'h4, 32'h12345678);  // transmit data 
-        AHBread (WORD, 32'h4, 32'h78);    // read back data? 
-        AHBread (WORD, 32'h8, 32'h2);   // read status: tx empty, rx empty 
-        AHBwrite(WORD, 32'h4, 32'h56);  // send more data 
-        AHBwrite(WORD, 32'h4, 32'h34);   
-        AHBread (WORD, 32'h8, 32'h0);  // read status: tx not empty, rx still empty 
-        AHBwrite(WORD, 32'hC, 32'hc);  // enable rx interrupts 
-        AHBread (WORD, 32'hC, 32'hC);  // readback of control register 
-      for (i=0; i<20; i=i+1) 
-        AHBwrite(WORD, 32'h4, i+20);  // transmit data to fill fifo 
-        AHBread (WORD, 32'h8, 32'h1); // read status: tx full, rx ? 
+        AHBwrite(WORD, 32'h8, 32'haa);  // transmit data
         AHBidle; 
+        #2850
+        AHBread (WORD, 32'h4, 32'haa);
+        AHBidle;
+
+//        AHBread (WORD, 32'h4, 32'h78);    // read back data? 
+//        AHBread (WORD, 32'h8, 32'h2);   // read status: tx empty, rx empty 
+//        AHBwrite(WORD, 32'h4, 32'h56);  // send more data 
+//        AHBwrite(WORD, 32'h4, 32'h34);   
+//        AHBread (WORD, 32'h8, 32'h0);  // read status: tx not empty, rx still empty 
+//        AHBwrite(WORD, 32'hC, 32'hc);  // enable rx interrupts 
+//        AHBread (WORD, 32'hC, 32'hC);  // readback of control register 
+//      for (i=0; i<20; i=i+1) 
+//        AHBwrite(WORD, 32'h4, i+20);  // transmit data to fill fifo 
+//        AHBread (WORD, 32'h8, 32'h1); // read status: tx full, rx ? 
+//        AHBidle; 
        
-      wait (uart_IRQ == 1'b1); // wait for interrupt 
-        AHBread (WORD, 32'h8, 32'h8); // read status: rx not empty 
-        AHBread (WORD, 32'h0, 32'h78);  // read data - should be first byte sent 
-        AHBidle; 
+//      wait (uart_IRQ == 1'b1); // wait for interrupt 
+//        AHBread (WORD, 32'h8, 32'h8); // read status: rx not empty 
+//        AHBread (WORD, 32'h0, 32'h78);  // read data - should be first byte sent 
+//        AHBidle; 
        
-      @ (posedge uart_IRQ ); // wait for interrupt 
-        AHBread (WORD, 32'h8, 32'ha); // read status: rx not empty, tx probably empty by now 
-        AHBread (WORD, 32'h0, 32'h56);  // read data 
-        AHBidle; 
+//      @ (posedge uart_IRQ ); // wait for interrupt 
+//        AHBread (WORD, 32'h8, 32'ha); // read status: rx not empty, tx probably empty by now 
+//        AHBread (WORD, 32'h0, 32'h56);  // read data 
+//        AHBidle; 
        
-      @ (posedge uart_IRQ ); // wait for interrupt 
-        AHBread (WORD, 32'h8, 32'ha); // read status: tx empty, rx not empty 
-        AHBread (WORD, 32'h0, 32'h34);  // read data - should be third byte 
-        AHBread (WORD, 32'h8, 32'h2); // read status: tx empty, rx not empty 
-        AHBwrite(WORD, 32'hC, 32'h2);      // enable tx empty interrupt 
-        AHBidle; 
+//      @ (posedge uart_IRQ ); // wait for interrupt 
+//        AHBread (WORD, 32'h8, 32'ha); // read status: tx empty, rx not empty 
+//        AHBread (WORD, 32'h0, 32'h34);  // read data - should be third byte 
+//        AHBread (WORD, 32'h8, 32'h2); // read status: tx empty, rx not empty 
+//        AHBwrite(WORD, 32'hC, 32'h2);      // enable tx empty interrupt 
+//        AHBidle; 
        
-      @ (posedge uart_IRQ ); // wait for interrupt 
-      for (i=20; i<30; i=i+1) 
-        AHBwrite(WORD, 32'h4, i+20);  // send more data to fill RX fifo 
-        AHBread (WORD, 32'h8, 32'hc); // read status: rx full 
-        AHBidle; 
-      for (i=0; i<20; i=i+1) 
-        AHBread (WORD, 32'h0, i+20);  // check received data  
-    #50; 
+//      @ (posedge uart_IRQ ); // wait for interrupt 
+//      for (i=20; i<30; i=i+1) 
+//        AHBwrite(WORD, 32'h4, i+20);  // send more data to fill RX fifo 
+//        AHBread (WORD, 32'h8, 32'hc); // read status: rx full 
+//        AHBidle; 
+//      for (i=0; i<20; i=i+1) 
+//        AHBread (WORD, 32'h0, i+20);  // check received data  
+//    #50; 
     $stop; 
        
          
@@ -110,8 +112,8 @@ module TB_AHBspi(    );
      
         reg [31:0] nextWdata = 32'h0;   // delayed data for write transactions 
         reg [31:0] expectRdata = 32'h0;   // expected read data for read transactions 
-         reg [31:0] rExpectRead;        // store expected read data 
-         reg checkRead;                    // remember that read in progress 
+        reg [31:0] rExpectRead;        // store expected read data 
+        reg checkRead;                    // remember that read in progress 
         reg error = 1'b0;  // read error signal - asserted for one cycle AFTER read completes 
      
         task AHBwrite;        // simulates write transaction on AHB Lite 

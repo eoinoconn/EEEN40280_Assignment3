@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////
 module TB_AHBuart2(    );
      
-	 reg HCLK;				// bus clock
+	reg HCLK;				// bus clock
     reg HRESETn;            // bus reset, active low
     reg HSELx = 1'b0;       // selects this slave
     reg [31:0] HADDR = 32'h0;    // address

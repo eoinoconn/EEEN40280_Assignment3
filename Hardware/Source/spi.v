@@ -6,8 +6,8 @@ module SPI(
     input wire [7:0] txdin,			// 8-bit data to be transmitted
     input wire txgo,					// indicates new data to send, ignored if not ready
     output reg MOSI,				// serial data out (idle at logic 1, high)
-    output reg SSn,
-    output reg SCLK,
+    output wire SSn,
+    output wire SCLK,
     output txrdy,					// transmitter ready for new data
     input MISO,						// serial data in (idle at logic 1, high)
     output reg [7:0] rxdout	// 8-bit received data
@@ -17,44 +17,39 @@ module SPI(
     ////////////////////////////////////////////////////////
     // SCLK counter
     ////////////////////////////////////////////////////////
-    reg [8:0] count;
-    wire [8:0] next_count = count + 9'b0;
+    reg [3:0] count;
+    wire [3:0] next_count = count + 4'b1;
     
-    always @(posedge clk)
+    always @(posedge clk or posedge rst)
         if (rst)
             count <= 4'b0;
-        else if (flip_SCLK)
+        else if (bitcount == 4'b0)
             count <= 4'b0;
         else
             count <= next_count;
             
-    assign flip_SCLK = (count[8] & ~txrdy);
+    assign SCLK = (count[3]);
     
-    always @(posedge clk)
-        if (rst)
-            SCLK <= 1'b0;
-        else if (txrdy)
-            SCLK <= 1'b0;
-        else if (flip_SCLK)
-            SCLK <= ~SCLK;
+//    always @(posedge clk or posedge rst)
+//        if (rst)
+//            SCLK <= 1'b0;
+//        else if (txrdy)
+//            SCLK <= 1'b0;
+//        else if (flip_SCLK)
+//            SCLK <= ~SCLK;
     
     ////////////////////////////////////////////////////////
     // SSn controller
     ////////////////////////////////////////////////////////
-    always @(posedge clk)
-        if (rst)
-            SSn <= 1'b1;
-        else if (~txgo & ~txrdy)
-            SSn <= 1'b0;
-        else if(txgo & txrdy)
-            SSn <= 1'b0;
+
+    assign SSn = (bitcount == 4'b0);
     
     ////////////////////////////////////////////////////////
     // input data capture
     ////////////////////////////////////////////////////////
     reg [7:0] datareg;
     
-    always @(posedge clk)
+    always @(posedge clk or posedge rst)
         if (rst)
             datareg <= 8'b0;
         else if (txgo & txrdy)
@@ -65,15 +60,18 @@ module SPI(
     // MOSI control
     ////////////////////////////////////////////////////////
     reg [3:0] bitcount;
-    wire [3:0] bitcount_decrement = bitcount - 4'b1;
+    reg [3:0] bitcount_decrement;
     assign txrdy = (bitcount == 4'b0);
     
-    always @(posedge clk)
+    always@(posedge SCLK)
+        bitcount_decrement = bitcount - 4'b1; 
+    
+    always @(posedge clk or posedge rst)
         if (rst)
             bitcount <= 4'b0;
         else if (txgo & txrdy)
-            bitcount <= 4'd8;
-        else if (~txrdy & SCLK)
+            bitcount <= 4'd9;
+        else if (count == 4'd8)
             bitcount <= bitcount_decrement;
     
     always @(bitcount, datareg)
@@ -91,7 +89,7 @@ module SPI(
          endcase
 
     ////////////////////////////////////////////////////////
-    // MOSI control
+    // MIS0 control
     //////////////////////////////////////////////////////// 
     
     always @ (posedge SCLK or posedge rst)
