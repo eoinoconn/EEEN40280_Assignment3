@@ -1,4 +1,4 @@
 *
-!*.v
+!Hardware/Source/Testbench
+!Hardware/Testbench
 !*.c
-!.gitignore
