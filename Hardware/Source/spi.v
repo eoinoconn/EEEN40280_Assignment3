@@ -3,15 +3,14 @@
 module SPI(
     input wire clk,						// main clock, drives all logic
     input wire rst,						// asynchronous reset
-    input wire [7:0] txdin,			// 8-bit data to be transmitted
+    input wire [7:0] txdin,				// 8-bit data to be transmitted
     input wire txgo,					// indicates new data to send, ignored if not ready
-    output reg MOSI,				// serial data out (idle at logic 1, high)
-    output wire SSn,
-    output wire SCLK,
-    output txrdy,					// transmitter ready for new data
-    input MISO,						// serial data in (idle at logic 1, high)
-    output reg [7:0] rxdout	// 8-bit received data
-    //output wire rxnew					// indicates new data available, asserted for 1 clock
+    output reg MOSI,					// data out (idle at logic 1, high)
+    output wire SSn,					// Slave select, idle high
+    output wire SCLK,					// SPI clock
+    output txrdy,						// transmitter ready for new data
+    input MISO,							// data in (idle at logic 1, high)
+    output reg [7:0] rxdout				// 8-bit received data
  );
     
     ////////////////////////////////////////////////////////
@@ -37,6 +36,7 @@ module SPI(
 
     assign SSn = (bitcount == 4'b0);
     
+	
     ////////////////////////////////////////////////////////
     // input data capture
     ////////////////////////////////////////////////////////
@@ -83,11 +83,10 @@ module SPI(
 
     ////////////////////////////////////////////////////////
     // MIS0 control
-    //////////////////////////////////////////////////////// 
-    
+    ////////////////////////////////////////////////////////
     always @ (posedge SCLK or posedge rst)
         if (rst) rxdout <= 8'b0;                // reset to zero
-        else                                      // on sampling pulse 
+        else                                    // on sampling pulse 
             rxdout <= {MISO, rxdout[7:1]};     // shift right...
         
     
