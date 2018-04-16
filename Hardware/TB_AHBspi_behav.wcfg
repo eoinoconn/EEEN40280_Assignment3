@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="TB_AHBspi_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="TB_AHBspi" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="21" />
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HCLK" type="logic">
+      <obj_property name="ElementShortName">HCLK</obj_property>
+      <obj_property name="ObjectShortName">HCLK</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HRESETn" type="logic">
+      <obj_property name="ElementShortName">HRESETn</obj_property>
+      <obj_property name="ObjectShortName">HRESETn</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HSELx" type="logic">
+      <obj_property name="ElementShortName">HSELx</obj_property>
+      <obj_property name="ObjectShortName">HSELx</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HADDR" type="array">
+      <obj_property name="ElementShortName">HADDR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HADDR[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HTRANS" type="array">
+      <obj_property name="ElementShortName">HTRANS[1:0]</obj_property>
+      <obj_property name="ObjectShortName">HTRANS[1:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HWRITE" type="logic">
+      <obj_property name="ElementShortName">HWRITE</obj_property>
+      <obj_property name="ObjectShortName">HWRITE</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HSIZE" type="array">
+      <obj_property name="ElementShortName">HSIZE[2:0]</obj_property>
+      <obj_property name="ObjectShortName">HSIZE[2:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HRDATA" type="array">
+      <obj_property name="ElementShortName">HRDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HRDATA[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HWDATA" type="array">
+      <obj_property name="ElementShortName">HWDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HWDATA[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HREADY" type="logic">
+      <obj_property name="ElementShortName">HREADY</obj_property>
+      <obj_property name="ObjectShortName">HREADY</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/SCLK" type="logic">
+      <obj_property name="ElementShortName">SCLK</obj_property>
+      <obj_property name="ObjectShortName">SCLK</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/SS" type="logic">
+      <obj_property name="ElementShortName">SS</obj_property>
+      <obj_property name="ObjectShortName">SS</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/rSPI/bitcount" type="array">
+      <obj_property name="ElementShortName">bitcount[3:0]</obj_property>
+      <obj_property name="ObjectShortName">bitcount[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/rSPI/txrdy" type="logic">
+      <obj_property name="ElementShortName">txrdy</obj_property>
+      <obj_property name="ObjectShortName">txrdy</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/rSPI/txgo" type="logic">
+      <obj_property name="ElementShortName">txgo</obj_property>
+      <obj_property name="ObjectShortName">txgo</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/rSPI/datareg" type="array">
+      <obj_property name="ElementShortName">datareg[7:0]</obj_property>
+      <obj_property name="ObjectShortName">datareg[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/MOSI" type="logic">
+      <obj_property name="ElementShortName">MOSI</obj_property>
+      <obj_property name="ObjectShortName">MOSI</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/rSPI/MISO" type="logic">
+      <obj_property name="ElementShortName">MISO</obj_property>
+      <obj_property name="ObjectShortName">MISO</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/checkRead" type="logic">
+      <obj_property name="ElementShortName">checkRead</obj_property>
+      <obj_property name="ObjectShortName">checkRead</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/error" type="logic">
+      <obj_property name="ElementShortName">error</obj_property>
+      <obj_property name="ObjectShortName">error</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/rSPI/rxdout" type="array">
+      <obj_property name="ElementShortName">rxdout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rxdout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>
