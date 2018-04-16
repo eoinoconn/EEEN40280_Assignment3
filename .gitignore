@@ -6,9 +6,9 @@ Hardware/DES_M0_SoC\.runs/
 Hardware/DES_M0_SoC\.sim/
 Hardware/DES_M0_SoC\.srcs/
 Hardware/\.Xil/
-Software/
+Software/temp_files
 
-!*.c
+!.c
 !.hex
 !.v
 *.xml
