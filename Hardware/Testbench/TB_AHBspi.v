@@ -57,17 +57,30 @@ module TB_AHBspi(    );
         #20 HRESETn = 1'b1; 
         #500; 
          
+//          AHBread(WORD, 32'h0, 32'd170);
+//          AHBidle;
+//          AHBread(WORD, 32'h4, 32'd0);
+//          AHBidle;
+//          AHBread(WORD, 32'h8, 32'b01010101);
+//          AHBidle;
+//          AHBread(WORD, 32'hc, 32'd0);
+//          AHBidle;
+          
+          
         AHBwrite(WORD, 32'hc, 32'h1);
-        AHBwrite(WORD, 32'h8, 32'haa);  // transmit data
+        AHBwrite(WORD, 32'h8, 32'hb);  // transmit data
+        AHBread(WORD, 32'h0, 32'd171);
         AHBidle;
         #3000
-        AHBwrite (WORD, 32'h8, 32'h11);
+        AHBwrite (WORD, 32'h8, 32'ha);
         AHBidle;
         #3000
-        
-        AHBwrite(WORD, 32'hc, 32'h0);
-        AHBread (WORD, 32'h0, 32'h0);
-        AHBread (WORD, 32'h4, 32'haa);
+        AHBwrite(WORD, 32'h8, 32'h3);
+        AHBread (WORD, 32'h4, 32'ha);
+        AHBidle;
+        #3000
+        AHBwrite (WORD, 32'hc, 32'h0);
+        AHBread (WORD, 32'h4, 32'h3);
         AHBidle;
 //        AHBread (WORD, 32'h4, 32'h78);    // read back data? 
 //        AHBread (WORD, 32'h8, 32'h2);   // read status: tx empty, rx empty 

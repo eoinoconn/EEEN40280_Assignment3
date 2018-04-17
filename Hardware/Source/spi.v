@@ -7,7 +7,7 @@ module SPI(
     input wire txgo,					// indicates new data to send, ignored if not ready
     output reg MOSI,					// data out (idle at logic 1, high)
     output wire SCLK,					// SPI clock
-    output txrdy,						// transmitter ready for new data
+    output wire txrdy,						// transmitter ready for new data
     input MISO,							// data in (idle at logic 1, high)
     output reg [7:0] rxdout				// 8-bit received data
  );
@@ -76,7 +76,8 @@ module SPI(
     // MIS0 control
     ////////////////////////////////////////////////////////
     always @ (posedge clk)
-        if (rst) rxdout <= 8'b0;                // reset to zero
+        if (rst) 
+            rxdout <= 8'b0;                // reset to zero
         else if(count[3:0] == 4'd8)                                   // on sampling pulse 
             rxdout <= {MISO, rxdout[7:1]};     // shift right...
         

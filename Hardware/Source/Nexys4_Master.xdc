@@ -438,10 +438,10 @@ set_property PACKAGE_PIN C15 [get_ports aclSS]
 	set_property IOSTANDARD LVCMOS33 [get_ports aclSS]
 ##Bank = 15, Pin name = IO_L20P_T3_A20_15,					Sch name = ACL_INT1
 #set_property PACKAGE_PIN C16 [get_ports aclInt1]					
-	#set_property IOSTANDARD LVCMOS33 [get_ports aclInt1]
+#	set_property IOSTANDARD LVCMOS33 [get_ports aclInt1]
 ##Bank = 15, Pin name = IO_L11P_T1_SRCC_15,					Sch name = ACL_INT2
 #set_property PACKAGE_PIN E15 [get_ports aclInt2]					
-	#set_property IOSTANDARD LVCMOS33 [get_ports aclInt2]
+#	set_property IOSTANDARD LVCMOS33 [get_ports aclInt2]
 
 
 

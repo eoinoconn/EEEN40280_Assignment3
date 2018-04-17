@@ -36,7 +36,7 @@ module AHBliteTop (
   localparam  BAD_DATA = 32'hdeadbeef;
 
 // ========================= Signals for monitoring on oscilloscope == 
-    assign JA = {4'b0, aclMOSI, aclMISO, aclSS, aclSCK};   // monitor serial communication
+    assign JA = {4'b1, aclMOSI, aclMISO, aclSS, aclSCK};   // monitor serial communication
     
 // ========================= Bus =====================================
 // Define AHB Lite bus signals
@@ -222,7 +222,7 @@ module AHBliteTop (
         .HREADYOUT      (HREADYOUT_rom),    // ready output
         // Loader connections
         .resetHW        (resetHW),			// hardware reset
-        .loadButton     (btnU),		   // pushbutton to activate loader
+        .loadButton     (btnC),		   // pushbutton to activate loader
         .serialRx	    (RsRx),         // serial input
         .status         (led_rom),      // 12-bit word count for display on LEDs
         .ROMload        (ROMload)			// loader active

@@ -162,14 +162,15 @@ int main(void) {
 //				Value=((receive_spi_data(0x0E)&0x12)<<8) + receive_spi_data(0x13);
 //			}
 			
-			Value=receive_spi_data(0x00);			//Check consant register 0xAD
-			
 			pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);		// Enable interrupts for UART in the NVIC
 
+			send_spi_data(0x2d, 0x42);
+			pt2SPI->SPIControl = 0x1;
+			
 			printf("\r\n:--> |%s|\r\n", TxBuf);  // print the results between bars
 			printf("Number of characters %d\r\n",count);
 			printf("State of switches %d\r\n",pt2GPIO->Switches);
-			printf("Accelerometer %x\r\n",Value);
+			printf("State of spi, %x, %x, %x, %x", pt2SPI->SPIStatus, pt2SPI->RxSPIData, pt2SPI->TxSPIData, pt2SPI->SPIControl);
 			
 		} // end of infinite loop
 
