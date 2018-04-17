@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module AHBspi(
 			// Bus signals
 			input wire HCLK,			// bus clock
@@ -55,7 +56,7 @@ module AHBspi(
         always @(rxdout, status, rHADDR)
             case (rHADDR)        							// select on word address (stored from address phase)
                 2'h0:        readData = {7'b0, status};    	// status register    
-                2'h1:        readData = rxdout;    			// read from rx fifo - oldest received byte
+                2'h2:        readData = rxdout;    			// read from rx fifo - oldest received byte
                 default:     readData = {8'b0};
             endcase
             

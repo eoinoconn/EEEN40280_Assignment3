@@ -58,11 +58,14 @@ module TB_AHBspi(    );
         #50; 
          
         AHBwrite(WORD, 32'h8, 32'haa);  // transmit data
-        AHBidle; 
-        #2850
+        AHBidle;
+        #300
+        AHBread (WORD, 32'h0, 32'h1);
+        AHBidle;
+        #3000
+        AHBread (WORD, 32'h0, 32'h0);
         AHBread (WORD, 32'h4, 32'haa);
         AHBidle;
-
 //        AHBread (WORD, 32'h4, 32'h78);    // read back data? 
 //        AHBread (WORD, 32'h8, 32'h2);   // read status: tx empty, rx empty 
 //        AHBwrite(WORD, 32'h4, 32'h56);  // send more data 
@@ -100,6 +103,7 @@ module TB_AHBspi(    );
 //      for (i=0; i<20; i=i+1) 
 //        AHBread (WORD, 32'h0, i+20);  // check received data  
 //    #50; 
+    #2700
     $stop; 
        
          

@@ -69,9 +69,13 @@ void send_spi_data(uint8 address, uint8 data) {
 	printf("\r\nSending instruction\r\n");
 	printf("Control %x\r\n",pt2SPI->SPIControl);
 	
-	while((pt2SPI->SPIControl&0x01)==0x00){}
+	while((pt2SPI->SPIControl&0x01)==0x00){
+		printf("The bit is still low\n");
+	}
 	printf("\r\nHigh\r\n");
-	while((pt2SPI->SPIControl&0x01)==0x01){}
+	while((pt2SPI->SPIControl&0x01)==0x01){
+		printf("The bit is still high %x\r\n", pt2SPI->SPIControl);
+	}
 	printf("\r\nLow\r\n");
 	pt2SPI->TxSPIData = address;
 	printf("\r\nSending adress\r\n");
@@ -116,8 +120,11 @@ int main(void) {
 	wait_n_loops(nLOOPS_per_DELAY);										// wait a little
 	
 	printf("\r\nWelcome to Eoin and Cian's SoC\r\n");			// output welcome message
-
-	send_spi_data(0x2d, 0x42);		//Setup Accelerometer
+	
+	printf("Control %x\r\n",pt2SPI->SPIControl);
+	//send_spi_data(0x2d, 0x42);		//Setup Accelerometer
+	
+	printf("\r\nDisplay AD: %x\r\n",receive_spi_data(0x00));
 	
 	printf("\r\nFinish Setup\r\n");
 	

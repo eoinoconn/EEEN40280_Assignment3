@@ -36,7 +36,7 @@ module AHBliteTop (
   localparam  BAD_DATA = 32'hdeadbeef;
 
 // ========================= Signals for monitoring on oscilloscope == 
-    assign JA = {6'b0, RsRx, RsTx};   // monitor serial communication
+    assign JA = {4'b0, aclMOSI, aclMISO, aclSS, aclSCK};   // monitor serial communication
     
 // ========================= Bus =====================================
 // Define AHB Lite bus signals
@@ -296,7 +296,7 @@ module AHBliteTop (
     AHBspi    SPI(
 			.HCLK        (HCLK),			   // bus clock
             .HRESETn     (HRESETn),            // bus reset, active low
-            .HSEL        (HSEL_uart),          // selects this slave
+            .HSEL        (HSEL_spi),          // selects this slave
             .HREADY      (HREADY),             // indicates previous transaction completing
             .HADDR       (HADDR),              // address
             .HTRANS      (HTRANS),             // transaction type (only bit 1 used)
@@ -306,9 +306,9 @@ module AHBliteTop (
 			.HRDATA      (HRDATA_spi),	       // read data from slave
 			.HREADYOUT   (HREADYOUT_spi),	   // ready output from slave
 			// SPI signals
-			.MISO        (aclMISO),			   // serial receive, idles at 1
-			.MOSI        (aclMOSI),			   // serial transmit, idles at 1
-			.SCLK        (aclSCK),			   // interrupt request
+			.MISO        (aclMISO),			   // serial receive, 
+			.MOSI        (aclMOSI),			   // serial transmit
+			.SCLK        (aclSCK),			   
 			.SSn         (aclSS)
     );
 

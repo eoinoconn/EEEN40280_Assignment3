@@ -19,10 +19,10 @@ module SPI(
     reg [3:0] count;
     wire [3:0] next_count = count + 4'b1;
     
-    always @(posedge clk or posedge rst)
+    always @(posedge clk)
         if (rst)
             count <= 4'b0;
-        else if (bitcount == 4'b0)
+        else if (bitcount == 4'b0 & SCLK == 1'b0)
             count <= 4'b0;
         else
             count <= next_count;
@@ -42,7 +42,7 @@ module SPI(
     ////////////////////////////////////////////////////////
     reg [7:0] datareg;
     
-    always @(posedge clk or posedge rst)
+    always @(posedge clk)
         if (rst)
             datareg <= 8'b0;
         else if (txgo & txrdy)
@@ -59,7 +59,7 @@ module SPI(
     always@(posedge SCLK)
         bitcount_decrement = bitcount - 4'b1; 
     
-    always @(posedge clk or posedge rst)
+    always @(posedge clk)
         if (rst)
             bitcount <= 4'b0;
         else if (txgo & txrdy)
@@ -84,9 +84,9 @@ module SPI(
     ////////////////////////////////////////////////////////
     // MIS0 control
     ////////////////////////////////////////////////////////
-    always @ (posedge SCLK or posedge rst)
+    always @ (posedge clk)
         if (rst) rxdout <= 8'b0;                // reset to zero
-        else                                    // on sampling pulse 
+        else if(count == 4'd8)                                   // on sampling pulse 
             rxdout <= {MISO, rxdout[7:1]};     // shift right...
         
     

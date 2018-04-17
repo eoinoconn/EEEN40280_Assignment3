@@ -96,6 +96,12 @@ begin
           dec = 16'b0000_0000_00001000;
           MUX_SEL = 4'd3;
         end
+
+    8'h52: 						//MEMORY MAP --> 0x5200_0000 to 0x52FF_FFFF  16MB
+        begin
+          dec = 16'b0000_0000_00010000;
+          MUX_SEL = 4'd4;
+        end
         
     default: //NOMAP
       begin
