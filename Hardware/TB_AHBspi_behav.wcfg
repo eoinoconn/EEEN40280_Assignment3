@@ -10,7 +10,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="22" />
+   <WVObjectSize size="25" />
    <wvobject db_ref_id="1" fp_name="/TB_AHBspi/HCLK" type="logic">
       <obj_property name="ElementShortName">HCLK</obj_property>
       <obj_property name="ObjectShortName">HCLK</obj_property>
@@ -104,5 +104,18 @@
    <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/status" type="logic">
       <obj_property name="ElementShortName">status</obj_property>
       <obj_property name="ObjectShortName">status</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/readData" type="array">
+      <obj_property name="ElementShortName">readData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">readData[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/rHADDR" type="array">
+      <obj_property name="ElementShortName">rHADDR[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rHADDR[1:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_AHBspi/dut/control" type="array">
+      <obj_property name="ElementShortName">control[7:0]</obj_property>
+      <obj_property name="ObjectShortName">control[7:0]</obj_property>
    </wvobject>
 </wave_config>

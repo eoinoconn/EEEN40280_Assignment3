@@ -23,6 +23,7 @@ module AHBspi(
         // Registers to hold signals from address phase
         reg [1:0] rHADDR;     // only need two bits of address
         reg rWrite, rRead;    // write enable signals
+        reg [7:0] control;
     
     
     
@@ -47,7 +48,13 @@ module AHBspi(
                 rRead <= HSEL & ~HWRITE & HTRANS[1];    // slave selected for read transfer 
              end
     
-            
+        always @(posedge HCLK)
+            if (!HRESETn) control = 8'b0;
+            else if (rWrite & (rHADDR == 2'b11))
+                control = HWDATA[7:0];
+        
+        assign SSn = ~control[0];
+        
         // Status bit - indicates the master is ready for another transmit message
         wire status = ~tx_ready;
         
@@ -56,7 +63,8 @@ module AHBspi(
         always @(rxdout, status, rHADDR)
             case (rHADDR)        							// select on word address (stored from address phase)
                 2'h0:        readData = {7'b0, status};    	// status register    
-                2'h2:        readData = rxdout;    			// read from rx fifo - oldest received byte
+                2'h1:        readData = rxdout;    			// read from rx fifo - oldest received byte
+                2'b11:       readData = control;
                 default:     readData = {8'b0};
             endcase
             
@@ -77,9 +85,7 @@ module AHBspi(
               .rxdout      (rxdout),				// Received message buffer
               .MISO        (MISO),              	// serial receive, idles at 1
               .MOSI        (MOSI),               	// serial transmit, idles at 1
-              .SCLK        (SCLK),               	// interrupt request
-              .SSn         (SSn) 					// salve select for accelerometer
+              .SCLK        (SCLK)               	// interrupt request
             );
     
 endmodule
-    

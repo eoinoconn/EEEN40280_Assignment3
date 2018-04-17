@@ -6,7 +6,6 @@ module SPI(
     input wire [7:0] txdin,				// 8-bit data to be transmitted
     input wire txgo,					// indicates new data to send, ignored if not ready
     output reg MOSI,					// data out (idle at logic 1, high)
-    output wire SSn,					// Slave select, idle high
     output wire SCLK,					// SPI clock
     output txrdy,						// transmitter ready for new data
     input MISO,							// data in (idle at logic 1, high)
@@ -16,25 +15,19 @@ module SPI(
     ////////////////////////////////////////////////////////
     // SCLK counter
     ////////////////////////////////////////////////////////
-    reg [3:0] count;
-    wire [3:0] next_count = count + 4'b1;
+    reg [7:0] count;
+    wire [7:0] next_count = count - 8'd1;
     
     always @(posedge clk)
         if (rst)
-            count <= 4'b0;
-        else if (bitcount == 4'b0 & SCLK == 1'b0)
-            count <= 4'b0;
-        else
+            count <= 8'd0;
+        else if (txgo)
+            count <= 8'd134;
+        else if (count != 8'd0)
             count <= next_count;
-            
+
+
     assign SCLK = (count[3]);
-    
-
-    ////////////////////////////////////////////////////////
-    // SSn controller
-    ////////////////////////////////////////////////////////
-
-    assign SSn = (bitcount == 4'b0);
     
 	
     ////////////////////////////////////////////////////////
@@ -53,18 +46,16 @@ module SPI(
     // MOSI control
     ////////////////////////////////////////////////////////
     reg [3:0] bitcount;
-    reg [3:0] bitcount_decrement;
+    wire [3:0] bitcount_decrement = bitcount - 4'b1;
     assign txrdy = (bitcount == 4'b0);
     
-    always@(posedge SCLK)
-        bitcount_decrement = bitcount - 4'b1; 
     
     always @(posedge clk)
         if (rst)
             bitcount <= 4'b0;
         else if (txgo & txrdy)
-            bitcount <= 4'd9;
-        else if (count == 4'd8)
+            bitcount <= 4'd8;
+        else if (count[3:0] == 4'd8)
             bitcount <= bitcount_decrement;
     
     always @(bitcount, datareg)
@@ -86,7 +77,7 @@ module SPI(
     ////////////////////////////////////////////////////////
     always @ (posedge clk)
         if (rst) rxdout <= 8'b0;                // reset to zero
-        else if(count == 4'd8)                                   // on sampling pulse 
+        else if(count[3:0] == 4'd8)                                   // on sampling pulse 
             rxdout <= {MISO, rxdout[7:1]};     // shift right...
         
     

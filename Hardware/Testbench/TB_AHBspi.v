@@ -55,14 +55,17 @@ module TB_AHBspi(    );
         HRESETn = 1'b1; 
         #20 HRESETn = 1'b0; 
         #20 HRESETn = 1'b1; 
-        #50; 
+        #500; 
          
+        AHBwrite(WORD, 32'hc, 32'h1);
         AHBwrite(WORD, 32'h8, 32'haa);  // transmit data
         AHBidle;
-        #300
-        AHBread (WORD, 32'h0, 32'h1);
+        #3000
+        AHBwrite (WORD, 32'h8, 32'h11);
         AHBidle;
         #3000
+        
+        AHBwrite(WORD, 32'hc, 32'h0);
         AHBread (WORD, 32'h0, 32'h0);
         AHBread (WORD, 32'h4, 32'haa);
         AHBidle;
@@ -103,7 +106,7 @@ module TB_AHBspi(    );
 //      for (i=0; i<20; i=i+1) 
 //        AHBread (WORD, 32'h0, i+20);  // check received data  
 //    #50; 
-    #2700
+
     $stop; 
        
          
