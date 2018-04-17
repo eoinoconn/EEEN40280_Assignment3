@@ -63,44 +63,31 @@ void wait_n_loops(uint32 n) {
 // Software interact spi master
 //////////////////////////////////////////////////////////////////
 void send_spi_data(uint8 address, uint8 data) {
-	printf("Control %x\r\n",pt2SPI->SPIControl);
-	printf("\r\nStarting\r\n");
+	pt2SPI->SPIControl = 0x01;
 	pt2SPI->TxSPIData = 0x0a;
-	printf("\r\nSending instruction\r\n");
-	printf("Control %x\r\n",pt2SPI->SPIControl);
-	
-	while((pt2SPI->SPIControl&0x01)==0x00){
-		printf("The bit is still low\n");
-	}
-	printf("\r\nHigh\r\n");
-	while((pt2SPI->SPIControl&0x01)==0x01){
-		printf("The bit is still high %x\r\n", pt2SPI->SPIControl);
-	}
-	printf("\r\nLow\r\n");
+	while((pt2SPI->SPIStatus&0x01)==0x00){}
+	while((pt2SPI->SPIStatus&0x01)==0x01){}
 	pt2SPI->TxSPIData = address;
-	printf("\r\nSending adress\r\n");
-	while((pt2SPI->SPIControl&0x01)==0x00){}
-	printf("\r\nHigh\r\n");
-	while((pt2SPI->SPIControl&0x01)==0x01){}
-	printf("\r\nLow\r\n");
+	while((pt2SPI->SPIStatus&0x01)==0x00){}
+	while((pt2SPI->SPIStatus&0x01)==0x01){}
 	pt2SPI->TxSPIData = data;
-	printf("\r\nSending data\r\n");
-	while((pt2SPI->SPIControl&0x01)==0x00){}
-	printf("\r\nHigh\r\n");
-	while((pt2SPI->SPIControl&0x01)==0x01){}
-	printf("\r\nLow\r\n");
+	while((pt2SPI->SPIStatus&0x01)==0x00){}
+	while((pt2SPI->SPIStatus&0x01)==0x01){}
+	pt2SPI->SPIControl = 0x00;
 }
 
 uint8 receive_spi_data(uint8 address) {
+	pt2SPI->SPIControl = 0x01;
 	pt2SPI->TxSPIData = 0x0b;
-	while((pt2SPI->SPIControl&0x01)==0x00){}
-	while((pt2SPI->SPIControl&0x01)==0x01){}
+	while((pt2SPI->SPIStatus&0x01)==0x00){}
+	while((pt2SPI->SPIStatus&0x01)==0x01){}
 	pt2SPI->TxSPIData = address;
-	while((pt2SPI->SPIControl&0x01)==0x00){}
-	while((pt2SPI->SPIControl&0x01)==0x01){}
+	while((pt2SPI->SPIStatus&0x01)==0x00){}
+	while((pt2SPI->SPIStatus&0x01)==0x01){}
 	pt2SPI->TxSPIData = 0x00;
-	while((pt2SPI->SPIControl&0x01)==0x00){}
-	while((pt2SPI->SPIControl&0x01)==0x01){}
+	while((pt2SPI->SPIStatus&0x01)==0x00){}
+	while((pt2SPI->SPIStatus&0x01)==0x01){}
+	pt2SPI->SPIControl = 0x00;
 	return pt2SPI->RxSPIData;
 }
 
@@ -121,7 +108,7 @@ int main(void) {
 	
 	printf("\r\nWelcome to Eoin and Cian's SoC\r\n");			// output welcome message
 	
-	printf("Control %x\r\n",pt2SPI->SPIControl);
+	printf("Control %x\r\n",pt2SPI->SPIStatus);
 	//send_spi_data(0x2d, 0x42);		//Setup Accelerometer
 	
 	printf("\r\nDisplay AD: %x\r\n",receive_spi_data(0x00));
