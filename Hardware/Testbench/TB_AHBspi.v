@@ -69,7 +69,7 @@ module TB_AHBspi(    );
           
         AHBwrite(WORD, 32'hc, 32'h1);
         AHBwrite(WORD, 32'h8, 32'hb);  // transmit data
-        AHBread(WORD, 32'h0, 32'd171);
+        AHBread(WORD, 32'h0, 32'd1);
         AHBidle;
         #3000
         AHBwrite (WORD, 32'h8, 32'ha);

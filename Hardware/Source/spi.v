@@ -60,14 +60,14 @@ module SPI(
     
     always @(bitcount, datareg)
         case(bitcount)		
-            4'd8:        MOSI = datareg[0];    
-            4'd7:        MOSI = datareg[1];
-            4'd6:        MOSI = datareg[2];
-            4'd5:        MOSI = datareg[3];
-            4'd4:        MOSI = datareg[4];
-            4'd3:        MOSI = datareg[5];
-            4'd2:        MOSI = datareg[6];
-            4'd1:        MOSI = datareg[7];    
+            4'd8:        MOSI = datareg[7];    
+            4'd7:        MOSI = datareg[6];
+            4'd6:        MOSI = datareg[5];
+            4'd5:        MOSI = datareg[4];
+            4'd4:        MOSI = datareg[3];
+            4'd3:        MOSI = datareg[2];
+            4'd2:        MOSI = datareg[1];
+            4'd1:        MOSI = datareg[0];    
             4'd0:        MOSI = 1'b0;            
             default:     MOSI = 1'b0;
          endcase
@@ -79,7 +79,7 @@ module SPI(
         if (rst) 
             rxdout <= 8'b0;                // reset to zero
         else if(count[3:0] == 4'd8)                                   // on sampling pulse 
-            rxdout <= {MISO, rxdout[7:1]};     // shift right...
+            rxdout <= {rxdout[6:0], MISO};     // shift right...
         
     
    endmodule

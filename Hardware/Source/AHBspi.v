@@ -62,7 +62,7 @@ module AHBspi(
         // Bus output signals
         always @(rxdout, status, control, rHADDR)
             case (rHADDR)        							// select on word address (stored from address phase)
-                2'b00:       readData = {7'd85, status};    // status register    
+                2'b00:       readData = {7'd0, status};    // status register    
                 2'b01:       readData = rxdout; 
                 2'b10:       readData = 8'b01010101;        // read from rx fifo - oldest received byte
                 2'b11:       readData = control;

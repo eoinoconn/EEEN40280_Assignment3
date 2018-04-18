@@ -26,6 +26,7 @@ volatile uint8  RxBuf[BUF_SIZE];
 
 volatile uint16 Value;
 volatile uint8 Control;
+volatile uint8 firstSwitches;
 
 //////////////////////////////////////////////////////////////////
 // Interrupt service routine, runs when UART interrupt occurs - see cm0dsasm.s
@@ -109,7 +110,7 @@ int main(void) {
 	printf("\r\nWelcome to Eoin and Cian's SoC\r\n");			// output welcome message
 	
 	printf("Control %x\r\n",pt2SPI->SPIStatus);
-	//send_spi_data(0x2d, 0x42);		//Setup Accelerometer
+	send_spi_data(0x2d, 0x42);		//Setup Accelerometer
 	
 	printf("\r\nDisplay AD: %x\r\n",receive_spi_data(0x00));
 	
@@ -164,13 +165,14 @@ int main(void) {
 			
 			pt2NVIC->Enable	 = (1 << NVIC_UART_BIT_POS);		// Enable interrupts for UART in the NVIC
 
-			send_spi_data(0x2d, 0x42);
-			pt2SPI->SPIControl = 0x1;
+			//send_spi_data(0x2d, 0x42);
+			//pt2SPI->SPIControl = 0x1;
 			
 			printf("\r\n:--> |%s|\r\n", TxBuf);  // print the results between bars
 			printf("Number of characters %d\r\n",count);
 			printf("State of switches %d\r\n",pt2GPIO->Switches);
-			printf("State of spi, %x, %x, %x, %x", pt2SPI->SPIStatus, pt2SPI->RxSPIData, pt2SPI->TxSPIData, pt2SPI->SPIControl);
+			firstSwitches = pt2GPIO->Switches;
+			printf("Accelerometer %d", receive_spi_data(firstSwitches));
 			
 		} // end of infinite loop
 

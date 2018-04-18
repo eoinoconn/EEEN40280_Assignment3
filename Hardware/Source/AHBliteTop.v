@@ -222,7 +222,7 @@ module AHBliteTop (
         .HREADYOUT      (HREADYOUT_rom),    // ready output
         // Loader connections
         .resetHW        (resetHW),			// hardware reset
-        .loadButton     (btnC),		   // pushbutton to activate loader
+        .loadButton     (btnU),		   // pushbutton to activate loader
         .serialRx	    (RsRx),         // serial input
         .status         (led_rom),      // 12-bit word count for display on LEDs
         .ROMload        (ROMload)			// loader active
